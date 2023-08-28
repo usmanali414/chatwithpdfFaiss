@@ -1,0 +1,14 @@
+<h2 class="pt-2">Youtube Video</h2>
+
+<form class="row g-3 justify-content-center" method="post" action="/youtube-video/" enctype="multipart/form-data">
+  <div class="col-12">
+      <input type="input" class="form-control " id="youtube-link" name="link" required  placeholder="Past YouTube Video Link...">
+  </div>
+  <div class="col-12">
+      <button type="submit" class="btn btn-primary btn-block mb-3">Upload</button>
+      
+  </div>
+ 
+</form>
+
+{% include "./components/processData.html" %}

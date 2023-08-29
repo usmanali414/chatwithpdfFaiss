@@ -70,11 +70,13 @@ async def userInput(request: Request):
 
         input_tokens = countTokens(query)
         if query:
-            response = obj.doc_response(query=query)
-            output_tokens = countTokens(response)
-            total_tokens = input_tokens + output_tokens
-            response = f"{response} \n,input: {input_tokens},\n output: {output_tokens},\n total: {total_tokens}"
-
+            try:
+                response = obj.doc_response(query=query)
+                output_tokens = countTokens(response)
+                total_tokens = input_tokens + output_tokens
+                response = f"{response} \n,input: {input_tokens},\n output: {output_tokens},\n total: {total_tokens}"
+            except:
+                response = " Process Documents "
 
     else:
        

@@ -1,3 +1,7 @@
+# chat and plot graph
+![image](https://github.com/usmanali414/chatwithpdfFaiss/assets/102586850/5e5d3ae1-4ced-4431-bac7-981184572fce)
+
+
 # chatwithpdfFaiss
 chat with pdf document using long-chain and Faiss vector store
 

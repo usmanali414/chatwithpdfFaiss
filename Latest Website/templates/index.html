@@ -1,0 +1,135 @@
+<div class="alert-messages  top-0 end-0 z-1 position-fixed w-25 m-3">
+<div class="message">
+    {% if file and file_error %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span><strong>Uploaded:</strong> {{file.filename}}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+       
+        
+
+    {% elif file and not file_error  %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span><strong>InValid: </strong> {{file.filename}} <br> Only pdf, docx, txt, rtf</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        
+
+    {% endif %}
+
+    {% if  link_error and link %}
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <span><strong>InValid: </strong> {{link}}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+    {% elif link %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <span><strong>Uploaded:</strong> {{link}}</span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endif %}
+
+
+</div>
+</div>
+
+
+<div class="container text-center">
+    
+    <div class="container-fluid justify-content-between h-100  d-flex ">
+        <div class="  w-75  ">		
+            <div class="col-md-12 col-xl-12 px-2 chat">
+                <div class="card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png" class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info text-left">
+                                <span>Chat with Document</span>
+                                {% if loaded_files %}
+                                <p class='text-left'>{{loaded_files[0]}}</p>
+                                {% endif %}
+                                {% if loaded_files_path %}
+                                <p class='text-left'>{{loaded_files_path[0]}}</p>
+                                {% endif %}
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div id="messageFormeight" class="card-body msg_card_body">
+                        
+                        
+                    </div>
+                    <div class="card-footer">
+                        <form id="plotButton" >
+                            <button type="submit" id="-plotButton" class="btn btn-sm btn-primary  mb-1 float-end " disabled>Plot Graphs
+                                <i class="fas fa-chart-bar px-1"></i>
+                            
+                            </button>
+                        </form>
+                        
+                        <form id="messageArea" class="input-group">
+                            <input type="text" id="text" name="msg" placeholder="Type your message..." autocomplete="off" class="form-control type_msg" required/>
+                            <div class="input-group-append ">
+                                <button type="submit" id="send" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="vh-50 w-25  rounded-1 bg-light p-2" >
+            <!-- <pre>
+                <code id='chart' class="language-js">
+                </code>
+            </pre> -->
+            <div id="chart-div" class="overflow-y-scroll " style="max-height: 90vh;"></div>
+            <!-- <canvas id="chart"></canvas> -->
+            <script>
+                // const text = "The market share for smartphones was 75% for Android, 23% for iOS, and the remaining 2% for other mobile operating systems.";
+
+                // // Extracting the percentages using regular expressions
+                // const percentages = text.match(/\d+%/g);
+
+                // // Checking if percentages are available
+                // if (percentages) {
+                // const data = percentages.map(percentage => parseInt(percentage));
+
+                // // Creating a chart using Chart.js library
+                // const ctx = document.getElementById('chart').getContext('2d');
+                // new Chart(ctx, {
+                //     type: 'pie',
+                //     data: {
+                //     labels: ['Android', 'iOS', 'Other'],
+                //     datasets: [{
+                //         data: data,
+                //         backgroundColor: ['#3cba9f', '#f44336', '#cddc39']
+                //     }]
+                //     },
+                //     options: {
+                //     responsive: true,
+                //     legend: {
+                //         position: 'bottom'
+                //     }
+                //     }
+                // });
+                // } else {
+                // console.log("Sorry, not much information to plot!");
+                // }
+            </script>
+            
+        </div>
+        
+    </div>
+
+   
+
+
+
+
+</div>
+
+

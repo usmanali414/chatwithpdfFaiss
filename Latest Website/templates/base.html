@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Document Chat</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+        <link href="{{ url_for('static', path='/sidebar.css') }}" rel="stylesheet">
+        <script src="{{ url_for('static', path='/sidebar.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js" integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    </head>
+<body>
+  
+    
+    <div id="mySidenav" class="sidenav">
+        <h2>Tasks</h2>
+        <div class="d-flex flex-wrap">
+
+            <a href="{{ url_for('documents') }}" class="btn btn-primary btn-sm m-1">Dcouments</a>
+            <a href="{{ url_for('youtube') }}" class="btn btn-primary btn-sm m-1">Youtube</a>
+            <a href="{{ url_for('data_retrival') }}" class="btn btn-primary btn-sm m-1">Retrieval</a>
+        </div>
+
+
+        <h2>Dcoument Files</h2>
+        
+        <div class="d-flex flex-wrap">
+            {% if loaded_files[1] %}
+            
+                {% for doc in loaded_files[1] %}
+                    <h5>
+                        <span class="badge text-bg-success m-1">{{doc}}</span>
+                    </h5>
+                {% endfor %}
+            {% else %}
+                
+                    <div class="alert alert-warning alert-dismissible fade show w-100" role="alert">
+                        <strong>No Data Available</strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                      </div>
+                      
+            {% endif %}
+            
+          </div>
+        
+      
+      
+
+         
+
+        <div class=" bottom-0  position-absolute mb-3">
+            <button class="btn btn-danger btn-block" onclick="confirmAndDelete()"><i class="fas fa-trash"></i> Delete Data</button>
+        </div>
+        
+    </div>
+    
+    <div id="main">
+            <div class="d-flex  ">
+                <span   style="font-size:30px;cursor:pointer" onclick="toggleNav()">
+                    &#9776; 
+                </span>
+                <span   style="font-size:30px;cursor:pointer">
+                    <a href="/"><i class="fas fa-home" ></i> </a>
+                </span>
+                <span class="flex-grow-1 text-center mb-0">
+                    
+                    {% include "index.html" %}
+                </span>
+
+            </div>
+
+           
+
+
+
+            
+        
+        
+        
+    </div>
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script>
+        function scrollChatToBottom() {
+            var chatContainer = document.getElementById("messageFormeight");
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        $(document).ready(function() {
+            $("#messageArea").on("submit", function(event) {
+                const date = new Date();
+                const hour = date.getHours();
+                const minute = date.getMinutes();
+                const str_time = hour+":"+minute;
+                var rawText = $("#text").val();
+
+                var userHtml = '<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + rawText + '<span class="msg_time_send">'+ str_time + '</span></div><div class="img_cont_msg"><img src="https://i.ibb.co/d5b84Xw/Untitled-design.png" class="rounded-circle user_img_msg"></div></div>';
+                
+                $("#text").val("");
+                $("#messageFormeight").append(userHtml);
+
+                $.ajax({
+                    data: {
+                        msg: rawText,	
+                    },
+                    type: "POST",
+                    url: "/chat",
+                }).done(function(chat_output) {
+                    var botHtml = '<div class="d-flex justify-content-start mb-4 text-left"><div class="img_cont_msg"><img src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + chat_output + '<span class="msg_time">' + str_time + '</span></div></div>';
+                    $("#messageFormeight").append($.parseHTML(botHtml));
+
+                 
+
+                    scrollChatToBottom();
+                });
+                event.preventDefault();
+            });
+        });
+
+        function confirmAndDelete() {
+            if (confirm("This will delete all uploaded files. Are you sure you want to proceed?")) {
+                // Make an API call to delete files and then redirect
+                fetch('/delete-files')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.deleted) {
+                            window.location.href = '/'; // Redirect to the index page
+                        } else {
+                            alert("Failed to delete files.");
+                        }
+                    })
+                    .catch(error => {
+                        alert("An error occurred while deleting files.");
+                    });
+            }
+        }
+   
+   </script>  
+
+ 
+
+</body>
+</html>

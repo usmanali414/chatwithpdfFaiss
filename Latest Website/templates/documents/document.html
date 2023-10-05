@@ -1,0 +1,17 @@
+<h2>Dcouments</h2>
+<form class="row g-3 justify-content-center " method="post" action="/document/" enctype="multipart/form-data">
+    <div class="col-auto">
+        <input type="file" class="form-control " id="document" name="files" multiple required>
+    </div>
+    
+    <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary mb-3 ">Upload</button>
+      </div>
+    
+</form>
+
+
+
+
+
+  {% include "./components/processData.html" %}
